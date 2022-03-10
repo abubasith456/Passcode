@@ -8,7 +8,7 @@
         android:id="@+id/constrainLayoutOuter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.MainActivity">
+        tools:context=".activity.LoginActivity">
 
         <EditText
             android:id="@+id/editText"

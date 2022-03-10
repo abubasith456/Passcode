@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.IdRes;
 
-import com.example.passcode.activity.MainActivity;
+import com.example.passcode.activity.LoginActivity;
 
 import java.util.Random;
 
@@ -47,7 +47,7 @@ public class KeyboardView extends FrameLayout implements View.OnClickListener {
         init();
     }
 
-    public void getActivity(MainActivity mainActivity) {
+    public void getActivity(LoginActivity loginActivity) {
 
     }
 

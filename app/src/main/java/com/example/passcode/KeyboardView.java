@@ -3,21 +3,19 @@ package com.example.passcode;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
-import android.view.inputmethod.InputConnectionWrapper;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.IdRes;
+
+import com.example.passcode.activity.MainActivity;
 
 import java.util.Random;
 
@@ -165,6 +163,8 @@ public class KeyboardView extends FrameLayout implements View.OnClickListener {
 //                    editable.delete(charCount - 1, charCount);
 //                }
 //                inputConnection.sendKeyEvent(e);
+                KeyEvent keyEvent=new KeyEvent(KeyEvent.KEYCODE_ENTER,KeyEvent.KEYCODE_0);
+                inputConnection.sendKeyEvent(keyEvent);
             }
             break;
         }

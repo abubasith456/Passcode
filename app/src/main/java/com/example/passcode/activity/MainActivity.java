@@ -1,28 +1,22 @@
-package com.example.passcode;
+package com.example.passcode.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.Context;
 import android.content.Intent;
-import android.database.DatabaseUtils;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.Toast;
 
+import com.example.passcode.KeyboardView;
+import com.example.passcode.R;
 import com.example.passcode.databinding.ActivityMainBinding;
-
-import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,12 +24,15 @@ public class MainActivity extends AppCompatActivity {
     KeyboardView keyboardView;
     InputConnection inputConnection;
     String password = "4321";
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        sharedPreferences = getSharedPreferences("SecretCode", Context.MODE_PRIVATE);
         keyboardView = new KeyboardView(getApplicationContext());
         keyboardView.init();
         keyboardView.getActivity(this);
@@ -64,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
 
-
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String pin=activityMainBinding.editText.getText().toString();
-                if (pin.equals(password)) {
+                String pin = activityMainBinding.editText.getText().toString();
+                String sPin = sharedPreferences.getString("pin", "");
+                if (pin.equals(sPin)) {
                     Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
                     startActivity(intent);
                 }

@@ -1,0 +1,87 @@
+package com.example.passcode;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
+import android.content.Intent;
+import android.database.DatabaseUtils;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.Toast;
+
+import com.example.passcode.databinding.ActivityMainBinding;
+
+import java.util.zip.Inflater;
+
+public class MainActivity extends AppCompatActivity {
+
+    ActivityMainBinding activityMainBinding;
+    KeyboardView keyboardView;
+    InputConnection inputConnection;
+    String password = "4321";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        keyboardView = new KeyboardView(getApplicationContext());
+        keyboardView.init();
+        keyboardView.getActivity(this);
+
+        KeyboardView keyboard = (KeyboardView) findViewById(R.id.myKeyboard);
+        // prevent system keyboard from appearing when EditText is tapped
+        activityMainBinding.editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        activityMainBinding.frameLayoutDialPad.setVisibility(View.GONE);
+        InputConnection ic = activityMainBinding.editText.onCreateInputConnection(new EditorInfo());
+        keyboard.setInputConnection(ic);
+
+        activityMainBinding.editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityMainBinding.frameLayoutDialPad.setVisibility(View.VISIBLE);
+            }
+        });
+
+        activityMainBinding.editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String pin=activityMainBinding.editText.getText().toString();
+                if (pin.equals(password)) {
+                    Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        activityMainBinding.constrainLayoutOuter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityMainBinding.frameLayoutDialPad.setVisibility(View.GONE);
+            }
+        });
+    }
+}

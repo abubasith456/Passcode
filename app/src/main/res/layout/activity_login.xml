@@ -3,48 +3,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".activity.MainActivity">
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:gravity="center"-->
-<!--            android:orientation="horizontal">-->
-
-<!--            <Button-->
-<!--                android:id="@+id/buttonPasscodeLogin"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="10dp"-->
-<!--                android:layout_marginEnd="10dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="passcode login" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/buttonPasscodeGenerate"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="10dp"-->
-<!--                android:layout_marginEnd="10dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="passcode generate" />-->
-
-<!--        </LinearLayout>-->
+        android:orientation="vertical">
 
 
-<!--        <FrameLayout-->
-<!--            android:id="@+id/frameLayoutLogin"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test Passcode"
+            android:textColor="@color/black"
+            android:textSize="28sp"
+            android:fontFamily="@font/prompt_bold"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/constrainLayoutOuter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-<!--            &lt;!&ndash; Fragment container &ndash;&gt;-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constrainLayoutOuter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="200dp"
 
-<!--        </FrameLayout>-->
+            android:background="@drawable/background_rounded_edit_text_gray"
+            android:backgroundTint="@color/purple_200"
+            tools:context=".activity.LoginActivity">
 
-    </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/prompt_medium"
+                android:padding="5dp"
+                android:text="Pin :"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/editText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.112"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="120dp"
+                android:background="@drawable/background_rounded_edit_text_gray"
+                android:elevation="10dp"
+                android:focusableInTouchMode="false"
+                android:hint="Pin"
+                android:fontFamily="@font/prompt_medium"
+                android:inputType="numberPassword"
+                android:maxLength="4"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.205" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/imageViewFingerPrint"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/fingerprint"
+                android:backgroundTint="@color/white"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.256"
+                app:layout_constraintStart_toEndOf="@+id/editText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.197" />
+
+            <FrameLayout
+                android:id="@+id/frameLayoutDialPad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.example.passcode.KeyboardView
+                    android:id="@+id/myKeyboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.722" />
+            </FrameLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

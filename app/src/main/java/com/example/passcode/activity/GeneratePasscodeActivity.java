@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -39,10 +40,6 @@ public class GeneratePasscodeActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    String pin = activityGeneratePasscodeBinding.editTextPin.getText().toString();
-                    if (charSequence.equals(pin)) {
-                        activityGeneratePasscodeBinding.editTextConfirmPinLayout.setHelperText("Match");
-                    }
                 }
 
                 @Override
@@ -50,10 +47,11 @@ public class GeneratePasscodeActivity extends AppCompatActivity {
                     String pin = activityGeneratePasscodeBinding.editTextPin.getText().toString();
                     String confirmPin = activityGeneratePasscodeBinding.editTextConfirmPin.getText().toString();
                     if (confirmPin.equals(pin)) {
-                        activityGeneratePasscodeBinding.editTextConfirmPinLayout.setHelperText("Matched");
+                        activityGeneratePasscodeBinding.mTextViewConfirmPinError.setVisibility(View.VISIBLE);
+                        activityGeneratePasscodeBinding.mTextViewConfirmPinError.setText("Matched");
                     } else {
-                        activityGeneratePasscodeBinding.editTextConfirmPinLayout.setHelperText("Not match");
-
+                        activityGeneratePasscodeBinding.mTextViewConfirmPinError.setVisibility(View.VISIBLE);
+                        activityGeneratePasscodeBinding.mTextViewConfirmPinError.setText("Not Match");
                     }
                 }
             });
@@ -64,12 +62,51 @@ public class GeneratePasscodeActivity extends AppCompatActivity {
                     String pin = activityGeneratePasscodeBinding.editTextPin.getText().toString();
                     String confirmPin = activityGeneratePasscodeBinding.editTextConfirmPin.getText().toString();
                     String hint = activityGeneratePasscodeBinding.editTextHint.getText().toString();
-                    if (!pin.equals("") && !confirmPin.equals("") && !hint.equals("")) {
-                        editor.putString("pin", confirmPin);
-                        editor.putString("hint", hint);
-                        editor.putString("status", "Generated");
-                        editor.apply();
-                        Toast.makeText(getApplicationContext(), "Generated", Toast.LENGTH_SHORT).show();
+
+                    if (pin.equals("")) {
+                        activityGeneratePasscodeBinding.mTextViewPinError.setVisibility(View.VISIBLE);
+                        activityGeneratePasscodeBinding.mTextViewPinError.setText("Please Enter the Pin");
+                    } else {
+                        activityGeneratePasscodeBinding.mTextViewPinError.setVisibility(View.GONE);
+                    }
+                    if (pin.length() < 4) {
+                        activityGeneratePasscodeBinding.mTextViewPinError.setVisibility(View.VISIBLE);
+                        activityGeneratePasscodeBinding.mTextViewPinError.setText("Enter 4 digit pin");
+                    } else {
+                        activityGeneratePasscodeBinding.mTextViewPinError.setVisibility(View.GONE);
+                    }
+                    if (confirmPin.equals("")) {
+                        activityGeneratePasscodeBinding.mTextViewConfirmPinError.setVisibility(View.VISIBLE);
+                        activityGeneratePasscodeBinding.mTextViewConfirmPinError.setText("Please Enter the confirm pin");
+                    } else {
+                        activityGeneratePasscodeBinding.mTextViewConfirmPinError.setVisibility(View.GONE);
+                    }
+
+                    if (hint.equals("")) {
+                        activityGeneratePasscodeBinding.mTextViewHintError.setVisibility(View.VISIBLE);
+                        activityGeneratePasscodeBinding.mTextViewHintError.setText("Please Enter the hint");
+                    } else {
+                        activityGeneratePasscodeBinding.mTextViewHintError.setVisibility(View.GONE);
+                    }
+
+                    if (!pin.equals("") && !confirmPin.equals("") && !hint.equals("") && pin.length() == 4) {
+                        if (pin.equals(confirmPin) && pin.length() == confirmPin.length()) {
+                            activityGeneratePasscodeBinding.mTextViewPinError.setVisibility(View.GONE);
+                            activityGeneratePasscodeBinding.mTextViewConfirmPinError.setVisibility(View.GONE);
+                            activityGeneratePasscodeBinding.mTextViewHintError.setVisibility(View.GONE);
+                            editor.putString("pin", confirmPin);
+                            editor.putString("hint", hint);
+                            editor.putString("status", "Generated");
+                            editor.apply();
+                            Toast.makeText(getApplicationContext(), "Generated", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(GeneratePasscodeActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            clearText();
+                        } else {
+                            activityGeneratePasscodeBinding.mTextViewConfirmPinError.setVisibility(View.VISIBLE);
+                            activityGeneratePasscodeBinding.mTextViewConfirmPinError.setText("Not matching");
+                        }
+
                     }
 //                    String check = sharedPreferences.getString("pin", "");
 //                    Toast.makeText(getContext(), "" + check, Toast.LENGTH_SHORT).show();
@@ -80,5 +117,14 @@ public class GeneratePasscodeActivity extends AppCompatActivity {
             Log.e("Error==>", e.getMessage());
         }
 
+    }
+
+    private void clearText() {
+        activityGeneratePasscodeBinding.mTextViewPinError.setVisibility(View.GONE);
+        activityGeneratePasscodeBinding.mTextViewConfirmPinError.setVisibility(View.GONE);
+        activityGeneratePasscodeBinding.mTextViewHintError.setVisibility(View.GONE);
+        activityGeneratePasscodeBinding.editTextPin.setText("");
+        activityGeneratePasscodeBinding.editTextConfirmPin.setText("");
+        activityGeneratePasscodeBinding.editTextHint.setText("");
     }
 }

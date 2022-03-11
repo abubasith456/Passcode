@@ -83,8 +83,6 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     public void showGallery() {
@@ -162,6 +160,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public String getImagePath(Uri uri) {
+        //Get path of of given image uri
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         if (cursor != null) {

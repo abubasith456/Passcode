@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_generate_passcode.xml" value="0.11614583333333334" />
         <entry key="app/src/main/res/layout/keyboard.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/list_item_image.xml" value="0.25" />
         <entry key="app/src/main/res/layout/main_fragment.xml" value="0.1015625" />
         <entry key="app/src/main/res/layout/new_keyboard.xml" value="0.115625" />
       </map>

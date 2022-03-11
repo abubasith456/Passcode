@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
     private Executor executor;
+    private int attempt = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +129,19 @@ public class LoginActivity extends AppCompatActivity {
                 if (pin.equals(sPin)) {
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(LoginActivity.this, "Wrong pin", Toast.LENGTH_SHORT).show();
+                    activityLoginBinding.editText.setText("");
+                    activityLoginBinding.frameLayoutDialPad.setVisibility(View.GONE);
+                } else if (pin.length() == 4) {
+                    if (attempt < 4) {
+                        if (!pin.equals(sPin)) {
+                            Toast.makeText(LoginActivity.this, "Wrong pin", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (attempt == 4) {
+                        Toast.makeText(LoginActivity.this, "Login limit exceed", Toast.LENGTH_SHORT).show();
+                    } else if (attempt > 4) {
+                        System.exit(0);
+                    }
+                    attempt++;
                 }
 
             }
@@ -159,5 +171,16 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

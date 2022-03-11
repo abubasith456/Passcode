@@ -130,34 +130,7 @@ public class DashboardActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-//        if (resultCode == Activity.RESULT_OK && requestCode == PICK_VIDEO) {
-//            if (data != null) {
-//                Uri contentURI = data.getData();
-//                String selectedVideoPath = getVideoPath(contentURI);
-//                Log.d("path",selectedVideoPath);
-//                paths.add(selectedVideoPath);
-//            }
-//        }
-        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE) {
-            if (data != null) {
-                Uri contentURI = data.getData();
-                String selectedImagePath = getImagePath(contentURI);
-                Log.e("path", selectedImagePath);
-                paths.add(selectedImagePath);
-            }
-        } else if (requestCode == IMAGE_PICK_CAMERA_CODE && resultCode == RESULT_OK) {
-            if (imageUri != null) {
-                String path = getImagePath(imageUri);
-                paths.add(path);
-                Log.e("Done in path", path);
-            }
-
-        }
-    }
 
     public String getImagePath(Uri uri) {
         //Get path of of given image uri
@@ -218,7 +191,35 @@ public class DashboardActivity extends AppCompatActivity {
         Intent pickCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         pickCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(pickCameraIntent, IMAGE_PICK_CAMERA_CODE);
-        Log.e("After pick ", String.valueOf(imageUri));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+//        if (resultCode == Activity.RESULT_OK && requestCode == PICK_VIDEO) {
+//            if (data != null) {
+//                Uri contentURI = data.getData();
+//                String selectedVideoPath = getVideoPath(contentURI);
+//                Log.d("path",selectedVideoPath);
+//                paths.add(selectedVideoPath);
+//            }
+//        }
+        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+                String selectedImagePath = getImagePath(contentURI);
+                Log.e("path", selectedImagePath);
+                paths.add(selectedImagePath);
+            }
+        } else if (requestCode == IMAGE_PICK_CAMERA_CODE && resultCode == RESULT_OK) {
+            if (imageUri != null) {
+                String path = getImagePath(imageUri);
+                paths.add(path);
+                Log.e("Done in path", path);
+            }
+
+        }
     }
 
     @Override

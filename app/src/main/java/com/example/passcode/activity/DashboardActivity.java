@@ -9,37 +9,74 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.passcode.R;
 import com.example.passcode.activity.adapter.RecyclerViewAdapter;
 import com.example.passcode.databinding.ActivityDashboardBinding;
+import com.impulsiveweb.galleryview.ActionCallback;
+import com.impulsiveweb.galleryview.GalleryView;
 
 import java.util.ArrayList;
 
 public class DashboardActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 200;
-    private ArrayList<String> imagePaths;
-    //    private RecyclerView imagesRV;
+    public static int PICK_IMAGE = 100;
+    public static int PICK_VIDEO = 101;
     ActivityDashboardBinding activityDashboardBinding;
-    private RecyclerViewAdapter imageRVAdapter;
+    public ArrayList<String> paths = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_dashboard);
         activityDashboardBinding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard);
-        imagePaths = new ArrayList<>();
-        prepareRecyclerView();
         requestPermissions();
-//        prepareRecyclerView();
 
+        activityDashboardBinding.buttonPickFromGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(galleryIntent, PICK_IMAGE);
+                } catch (Exception e) {
+                    Log.e("Error ==> ", "" + e);
+
+                }
+            }
+        });
+
+        activityDashboardBinding.buttonShowGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showGallery();
+            }
+        });
+
+
+    }
+
+    public void showGallery() {
+//        GalleryView.show(DashboardActivity.this, paths);
+        GalleryView.show(this, paths, 0, new ActionCallback() {
+
+            @Override
+            public void onAction(String path, int position) {
+                Log.e("Action", "Done");
+            }
+        });
     }
 
     private void requestPermissions() {
@@ -47,7 +84,6 @@ public class DashboardActivity extends AppCompatActivity {
             // if the permissions are already granted we are calling
             // a method to get all images from our external storage.
             Toast.makeText(this, "Permissions granted..", Toast.LENGTH_SHORT).show();
-            getImagePath();
         } else {
             // if the permissions are not granted we are
             // calling a method to request permissions.
@@ -66,64 +102,40 @@ public class DashboardActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
-    private void getImagePath() {
-        // in this method we are adding all our image paths
-        // in our arraylist which we have created.
-        // on below line we are checking if the device is having an sd card or not.
-        boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if (isSDPresent) {
-
-            // if the sd card is present we are creating a new list in
-            // which we are getting our images data with their ids.
-            final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
-
-            // on below line we are creating a new
-            // string to order our images by string.
-            final String orderBy = MediaStore.Images.Media._ID;
-
-            // this method will stores all the images
-            // from the gallery in Cursor
-            Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
-
-            // below line is to get total number of images
-            int count = cursor.getCount();
-
-            // on below line we are running a loop to add
-            // the image file path in our array list.
-            for (int i = 0; i < count; i++) {
-
-                // on below line we are moving our cursor position
-                cursor.moveToPosition(i);
-
-                // on below line we are getting image file path
-                int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-
-                // after that we are getting the image file path
-                // and adding that path in our array list.
-                imagePaths.add(cursor.getString(dataColumnIndex));
+//        if (resultCode == Activity.RESULT_OK && requestCode == PICK_VIDEO) {
+//            if (data != null) {
+//                Uri contentURI = data.getData();
+//                String selectedVideoPath = getVideoPath(contentURI);
+//                Log.d("path",selectedVideoPath);
+//                paths.add(selectedVideoPath);
+//            }
+//        }
+        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+                String selectedImagePath = getImagePath(contentURI);
+                Log.d("path", selectedImagePath);
+                paths.add(selectedImagePath);
             }
-            imageRVAdapter.notifyDataSetChanged();
-            // after adding the data to our
-            // array list we are closing our cursor.
-            cursor.close();
         }
     }
 
-    private void prepareRecyclerView() {
-
-        // in this method we are preparing our recycler view.
-        // on below line we are initializing our adapter class.
-        imageRVAdapter = new RecyclerViewAdapter(DashboardActivity.this, imagePaths);
-
-        // on below line we are creating a new grid layout manager.
-        GridLayoutManager manager = new GridLayoutManager(DashboardActivity.this, 4);
-
-        // on below line we are setting layout
-        // manager and adapter to our recycler view.
-        activityDashboardBinding.idRVImages.setLayoutManager(manager);
-        activityDashboardBinding.idRVImages.setAdapter(imageRVAdapter);
+    public String getImagePath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } else
+            return null;
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -139,10 +151,9 @@ public class DashboardActivity extends AppCompatActivity {
                         // if the permissions are accepted we are displaying a toast message
                         // and calling a method to get image path.
                         Toast.makeText(this, "Permissions Granted..", Toast.LENGTH_SHORT).show();
-                        getImagePath();
                     } else {
                         // if permissions are denied we are closing the app and displaying the toast message.
-                        Toast.makeText(this, "Permissions denined, Permissions are required to use the app..", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Permissions denied, Permissions are required to use the app..", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;

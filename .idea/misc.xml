@@ -6,7 +6,7 @@
         <entry key="app/src/main/res/drawable/background_rounded_edit_text_gray.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/icon_delete.xml" value="0.1715" />
         <entry key="app/src/main/res/drawable/keyboard_divider.xml" value="0.1715" />
-        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.23645833333333333" />
+        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.11109364827473955" />
         <entry key="app/src/main/res/layout/activity_generate_passcode.xml" value="0.253497314453125" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.16205533596837945" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />

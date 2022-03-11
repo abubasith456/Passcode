@@ -50,4 +50,7 @@ dependencies {
 
     implementation "com.squareup.picasso:picasso:2.71828"
 
+    //Gallery view
+    implementation "com.github.sheetalkumar105:androidimagevideogallery:1.05"
+
 }
